@@ -1,7 +1,8 @@
-from datetime import date
+from datetime import date, timedelta
 from model.customer import Customer
 from model.plan import Plan
 from model.contract import Contract
+from model.invoice import Invoice
 
 if __name__ == "__main__":
     
@@ -15,3 +16,13 @@ if __name__ == "__main__":
     print(f"Contrato criado: {contrato1}")
     print(f"Status do cliente: {cliente1.get_status()}")
     print(f"Status do contrato: {contrato1.get_status()}")
+
+    # Emissão de fatura
+    fatura1 = Invoice(contract=contrato1, issue_date=hoje)
+    print(f"Fatura emitida: {fatura1}")
+    print(f"Status da fatura: {fatura1.get_status()}")
+    
+    # Exemplo de pagamento
+    data_pagamento = hoje + timedelta(days=5)
+    fatura1.pay(pay_date=data_pagamento)
+    print(f"Status da fatura após pagamento: {fatura1.get_status()}")
