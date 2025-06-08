@@ -43,6 +43,19 @@ class Invoice:
             return f"Pago em {self.paid_date}"
         return f"Aberta (vencimento em {self.due_date})"
 
+    def to_dict(self) -> dict:
+        """
+        Converte a fatura em um dicionário para persistência.
+        """
+        return {
+            "customer_ssn": self.contract.customer.ssn,
+            "issue_date": self.issue_date.isoformat(),
+            "amount": self.amount,
+            "due_date": self.due_date.isoformat(),
+            "paid": self.paid,
+            "paid_date": self.paid_date.isoformat() if self.paid_date else None
+        }
+        
     def __repr__(self) -> str:
         status = "Pago" if self.paid else "Aberta"
         return (

@@ -24,5 +24,15 @@ class Plan:
         return (f"Plan {self.name}: {self.speed_mbps:.1f} Mbps "
                 f"for $ {self.monthly_fee:.2f}/month")
 
+    def to_dict(self) -> dict:
+        """
+        Converte o plano em um dicionário para persistência.
+        """
+        return {
+            "name": self.name,
+            "speed_mbps": self.speed_mbps,
+            "monthly_fee": self.monthly_fee
+        }
+
     def __repr__(self) -> str:
         return f"<Plan name={self.name} {self.speed_mbps}Mbps ${self.monthly_fee:.2f}>"

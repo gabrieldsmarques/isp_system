@@ -64,6 +64,20 @@ class SupportTicket:
             return f"Aberto desde {self.open_date}"
         return f"Fechado em {self.close_date}"
 
+    def to_dict(self) -> dict:
+        """
+        Converte o chamado em um dicionário para persistência.
+        """
+        return {
+            "id": self.id,
+            "customer_ssn": self.customer.ssn,
+            "issue_description": self.issue_description,
+            "open_date": self.open_date.isoformat(),
+            "status": self.status,
+            "close_date": self.close_date.isoformat() if self.close_date else None,
+            "resolution": self.resolution
+        }
+        
     def __repr__(self) -> str:
         return (
             f"<SupportTicket #{self.id} customer={self.customer.name} "

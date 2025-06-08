@@ -56,6 +56,18 @@ class Contract:
         """
         return "Ativo" if self.active else f"Inativo (encerrado em {self.end_date})"
 
+    def to_dict(self) -> dict:
+        """
+        Converte o contrato em um dicionário para persistência.
+        """
+        return {
+            "customer_ssn": self.customer.ssn,
+            "plan_name": self.plan.name,
+            "start_date": self.start_date.isoformat(),
+            "active": self.active,
+            "end_date": self.end_date.isoformat() if self.end_date else None
+        }
+        
     def __repr__(self) -> str:
         status = "Ativo" if self.active else "Inativo"
         return (

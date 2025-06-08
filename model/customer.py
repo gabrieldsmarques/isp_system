@@ -32,6 +32,16 @@ class Customer:
         :return: status atual do cliente
         """
         return "Possui contrato" if self.contract else "Não possui contrato"
+    
+    def to_dict(self) -> dict:
+        """
+        Converte o cliente em um dicionário para persistência.
+        """
+        return {
+            "ssn": self.ssn,
+            "name": self.name,
+            "address": self.address
+        }
 
     def __repr__(self) -> str:
         return f"<Customer ssn={self.ssn} name={self.name}>"

@@ -4,6 +4,7 @@ from model.plan import Plan
 from model.contract import Contract
 from model.invoice import Invoice
 from model.support_ticket import SupportTicket
+from persistence import JsonPersistence
 
 if __name__ == "__main__":
     
@@ -46,3 +47,18 @@ if __name__ == "__main__":
         close_date=data_fechamento
     )
     print(f"Status do chamado após fechamento: {chamado1.get_status()}")
+    
+    # Persistência em JSON
+    data = {
+        "customers": [cliente1.to_dict()],
+        "plans": [plano_basico.to_dict()],
+        "contracts": [contrato1.to_dict()],
+        "invoices": [fatura1.to_dict()],
+        "support_tickets": [chamado1.to_dict()]
+    }
+    JsonPersistence.save("data.json", data)
+    print("Dados salvos em data.json")
+
+    # Carregamento e exibição
+    loaded = JsonPersistence.load("data.json")
+    print("Dados carregados:", loaded)
