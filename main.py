@@ -3,6 +3,7 @@ from model.customer import Customer
 from model.plan import Plan
 from model.contract import Contract
 from model.invoice import Invoice
+from model.support_ticket import SupportTicket
 
 if __name__ == "__main__":
     
@@ -26,3 +27,22 @@ if __name__ == "__main__":
     data_pagamento = hoje + timedelta(days=5)
     fatura1.pay(pay_date=data_pagamento)
     print(f"Status da fatura após pagamento: {fatura1.get_status()}")
+    
+    
+    
+    # Abertura de chamado de suporte
+    chamado1 = SupportTicket(
+        customer=cliente1,
+        issue_description="Internet intermitente nos finais de semana",
+        open_date=hoje
+    )
+    print(f"Chamado aberto: {chamado1}")
+    print(f"Status do chamado: {chamado1.get_status()}")
+
+    # Encerrando chamado
+    data_fechamento = hoje + timedelta(days=2)
+    chamado1.close(
+       resolution="Reinicialização do modem e ajuste de sinal concluídos",
+        close_date=data_fechamento
+    )
+    print(f"Status do chamado após fechamento: {chamado1.get_status()}")
