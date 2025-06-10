@@ -1,10 +1,13 @@
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 from datetime import date, timedelta
-from model.customer import Customer
-from model.plan import Plan
-from model.contract import Contract
-from model.invoice import Invoice
-from model.support_ticket import SupportTicket
-from persistence import JsonPersistence
+from models.customer import Customer
+from models.plan import Plan
+from models.contract import Contract
+from models.invoice import Invoice
+from models.support_ticket import SupportTicket
+from persistence.json_persistence import JsonPersistence
 import re
 
 DATA_FILE = "data.json"
