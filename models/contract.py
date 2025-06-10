@@ -61,7 +61,7 @@ class Contract:
         Converte o contrato em um dicionário para persistência.
         """
         return {
-            "customer_ssn": self.customer.ssn,
+            "customer_cpf": self.customer.cpf,
             "plan_name": self.plan.name,
             "start_date": self.start_date.isoformat(),
             "active": self.active,

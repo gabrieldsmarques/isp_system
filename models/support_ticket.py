@@ -70,7 +70,7 @@ class SupportTicket:
         """
         return {
             "id": self.id,
-            "customer_ssn": self.customer.ssn,
+            "customer_cpf": self.customer.cpf,
             "issue_description": self.issue_description,
             "open_date": self.open_date.isoformat(),
             "status": self.status,

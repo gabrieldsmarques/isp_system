@@ -3,15 +3,15 @@ class Customer:
     Representa um cliente do ISP.
     """
 
-    def __init__(self, ssn: str, name: str, address: str):
+    def __init__(self, cpf: str, name: str, address: str):
         """
-        Inicializa um cliente com SSN, nome e endereço.
+        Inicializa um cliente com CPF, nome e endereço.
 
-        :param ssn: SSN do cliente (string, sem formatação)
+        :param cpf: CPF do cliente (string, sem formatação)
         :param name: Nome completo do cliente
         :param address: Endereço de instalação
         """
-        self.ssn = ssn
+        self.cpf = cpf
         self.name = name
         self.address = address
         self.contract = None  # será vinculado quando um contrato for criado
@@ -38,10 +38,10 @@ class Customer:
         Converte o cliente em um dicionário para persistência.
         """
         return {
-            "ssn": self.ssn,
+            "cpf": self.cpf,
             "name": self.name,
             "address": self.address
         }
 
     def __repr__(self) -> str:
-        return f"<Customer ssn={self.ssn} name={self.name}>"
+        return f"<Customer cpf={self.cpf} name={self.name}>"

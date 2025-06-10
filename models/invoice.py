@@ -48,7 +48,7 @@ class Invoice:
         Converte a fatura em um dicionário para persistência.
         """
         return {
-            "customer_ssn": self.contract.customer.ssn,
+            "customer_cpf": self.contract.customer.cpf,
             "issue_date": self.issue_date.isoformat(),
             "amount": self.amount,
             "due_date": self.due_date.isoformat(),
