@@ -1,0 +1,13 @@
+{
+    "customers": [
+        {
+            "cpf": "32131313123",
+            "name": "",
+            "address": "das"
+        }
+    ],
+    "plans": [],
+    "contracts": [],
+    "invoices": [],
+    "support_tickets": []
+}

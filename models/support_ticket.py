@@ -77,6 +77,24 @@ class SupportTicket:
             "close_date": self.close_date.isoformat() if self.close_date else None,
             "resolution": self.resolution
         }
+    @classmethod
+    def from_dict(cls, data: dict, cust_map: dict) -> "SupportTicket":
+        # reconstrói o ticket
+        tick = cls(
+            customer=cust_map[data["customer_cpf"]],
+            issue_description=data["issue_description"],
+            open_date=date.fromisoformat(data["open_date"])
+       )
+        # ajustar id e contador
+        tick.id = data["id"]
+        if data["id"] > cls._id_counter:
+            cls._id_counter = data["id"]
+        # restaurar estado
+        tick.status = data["status"]
+        if data["close_date"]:
+           tick.close_date = date.fromisoformat(data["close_date"])
+        tick.resolution = data["resolution"]
+        return tick
         
     def __repr__(self) -> str:
         return (

@@ -33,6 +33,14 @@ class Plan:
             "speed_mbps": self.speed_mbps,
             "monthly_fee": self.monthly_fee
         }
+        
+    @classmethod
+    def from_dict(cls, data: dict) -> "Plan":
+        return cls(
+            name=data["name"],
+            speed_mbps=data["speed_mbps"],
+            monthly_fee=data["monthly_fee"]
+       )
 
     def __repr__(self) -> str:
         return f"<Plan name={self.name} {self.speed_mbps}Mbps ${self.monthly_fee:.2f}>"

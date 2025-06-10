@@ -1,5 +1,3 @@
-# isp_system/cli/controllers/contract_controller.py
-
 from cli.utils import select_from_list
 from services.contract_service import (
     create_contract, list_contracts,

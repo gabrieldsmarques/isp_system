@@ -68,6 +68,20 @@ class Contract:
             "end_date": self.end_date.isoformat() if self.end_date else None
         }
         
+    @classmethod
+    def from_dict(cls, data: dict, cust_map: dict, plan_map: dict) -> "Contract":
+        start = date.fromisoformat(data["start_date"])
+        ctr = cls(
+            customer=cust_map[data["customer_cpf"]],
+            plan=plan_map[data["plan_name"]],
+            start_date=start
+        )
+        # restaurar estado
+        ctr.active = data["active"]
+        if data["end_date"] is not None:
+            ctr.end_date = date.fromisoformat(data["end_date"])
+        return ctr
+        
     def __repr__(self) -> str:
         status = "Ativo" if self.active else "Inativo"
         return (

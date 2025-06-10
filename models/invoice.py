@@ -56,6 +56,21 @@ class Invoice:
             "paid_date": self.paid_date.isoformat() if self.paid_date else None
         }
         
+    @classmethod
+    def from_dict(cls, data: dict, ctr_map: dict) -> "Invoice":
+        issue = date.fromisoformat(data["issue_date"])
+        inv = cls(
+            contract=ctr_map[data["customer_cpf"]],
+            issue_date=issue
+        )
+        # restaurar estado
+        inv.amount = data["amount"]
+        inv.due_date = date.fromisoformat(data["due_date"])
+        inv.paid = data["paid"]
+        if data["paid_date"]:
+            inv.paid_date = date.fromisoformat(data["paid_date"])
+        return inv
+        
     def __repr__(self) -> str:
         status = "Pago" if self.paid else "Aberta"
         return (

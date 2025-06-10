@@ -42,6 +42,15 @@ class Customer:
             "name": self.name,
             "address": self.address
         }
+        
+    @classmethod
+    def from_dict(cls, data: dict) -> "Customer":
+        # Reconstrói um Customer a partir do dicionário
+        return cls(
+            cpf=data["cpf"],
+            name=data["name"],
+            address=data["address"]
+        )
 
     def __repr__(self) -> str:
         return f"<Customer cpf={self.cpf} name={self.name}>"
