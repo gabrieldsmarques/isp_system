@@ -1,6 +1,7 @@
 from models.customer import Customer
 from validators.input_validators import valid_cpf
-from cli.utils import select_from_list
+from cli.utils import select_from_list, select_or_search
+
 
 def handle_add_customer(customers: list[Customer]) -> None:
     cpf = input("CPF (11 dígitos): ").strip()
@@ -19,7 +20,7 @@ def handle_list_customers(customers: list[Customer]) -> None:
         print(f" - {c} | {c.get_status()}")
 
 def handle_edit_customer(customers: list[Customer]) -> None:
-    idx = select_from_list(customers, "cliente")
+    idx = select_or_search(customers, "cliente", attr="cpf")
     if idx is None:
         return
     c = customers[idx]
@@ -30,7 +31,7 @@ def handle_edit_customer(customers: list[Customer]) -> None:
     print("> Cliente atualizado.")
 
 def handle_remove_customer(customers: list[Customer]) -> None:
-    idx = select_from_list(customers, "cliente")
+    idx = select_or_search(customers, "cliente", attr="cpf")
     if idx is None:
         return
     removed = customers.pop(idx)

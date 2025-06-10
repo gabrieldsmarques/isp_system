@@ -5,6 +5,7 @@ from services.support_ticket_service import (
 )
 from models.support_ticket import SupportTicket
 from datetime import date
+from exceptions import TicketAlreadyClosedError, TicketAlreadyOpenError
 
 def handle_open_ticket(customers: list, tickets: list[SupportTicket]) -> None:
     ci = select_from_list(customers, "cliente")
@@ -26,21 +27,21 @@ def handle_close_ticket(tickets: list) -> None:
     if idx is None:
         return
     res = input("Resolução: ").strip()
-    ok = close_ticket(tickets[idx], res, date.today())
-    if ok:
+    try:
+        close_ticket(tickets[idx], res, date.today())
         print("> Chamado fechado.")
-    else:
-        print("> Chamado já está fechado.")
+    except TicketAlreadyClosedError as e:
+        print(f"> {e}")
 
 def handle_reopen_ticket(tickets: list) -> None:
     idx = select_from_list(tickets, "chamado")
     if idx is None:
         return
-    ok = reopen_ticket(tickets[idx], date.today())
-    if ok:
+    try:
+        reopen_ticket(tickets[idx], date.today())
         print("> Chamado reaberto.")
-    else:
-        print("> Chamado já está aberto.")
+    except TicketAlreadyOpenError as e:
+        print(f"> {e}")
 
 def handle_remove_ticket(tickets: list) -> None:
     idx = select_from_list(tickets, "chamado")

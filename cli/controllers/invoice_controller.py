@@ -5,6 +5,7 @@ from services.invoice_service import (
 )
 from models.invoice import Invoice
 from datetime import date
+from exceptions import InvoiceAlreadyPaidError
 
 def handle_generate_invoice(contracts: list, invoices: list[Invoice]) -> None:
     ativos = [c for c in contracts if c.active]
@@ -28,11 +29,11 @@ def handle_pay_invoice(invoices: list[Invoice]) -> None:
     idx = select_from_list(invoices, "fatura")
     if idx is None:
         return
-    ok = pay_invoice(invoices[idx], date.today())
-    if ok:
+    try:
+        pay_invoice(invoices[idx], date.today())
         print("> Fatura paga.")
-    else:
-        print("> Fatura já paga.")
+    except InvoiceAlreadyPaidError as e:
+        print(f"> {e}")
 
 def handle_remove_invoice(invoices: list[Invoice]) -> None:
     idx = select_from_list(invoices, "fatura")

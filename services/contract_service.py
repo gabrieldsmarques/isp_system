@@ -10,11 +10,8 @@ def create_contract(contracts: List[Contract], customer, plan, start_date: date)
 def list_contracts(contracts: List[Contract]) -> List[str]:
     return [f"{c} | {c.get_status()}" for c in contracts]
 
-def cancel_contract(contract: Contract, cancel_date: date) -> bool:
-    if not contract.active:
-        return False
+def cancel_contract(contract: Contract, cancel_date: date) -> None:
     contract.cancel(cancel_date)
-    return True
 
 def reactivate_contract(contract: Contract, new_start_date: date) -> bool:
     if contract.active:

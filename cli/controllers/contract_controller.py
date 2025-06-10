@@ -5,6 +5,7 @@ from services.contract_service import (
 )
 from models.contract import Contract
 from datetime import date
+from exceptions import ContractInactiveError, ContractActiveError
 
 def handle_create_contract(customers: list, plans: list, contracts: list[Contract]) -> None:
     if not customers or not plans:
@@ -28,21 +29,21 @@ def handle_cancel_contract(contracts: list[Contract]) -> None:
     idx = select_from_list(contracts, "contrato")
     if idx is None:
         return
-    ok = cancel_contract(contracts[idx], date.today())
-    if ok:
+    try:
+        cancel_contract(contracts[idx], date.today())
         print("> Contrato cancelado.")
-    else:
-        print("> Contrato já está inativo.")
+    except ContractInactiveError as e:
+        print(f"> {e}")
 
 def handle_reactivate_contract(contracts: list[Contract]) -> None:
     idx = select_from_list(contracts, "contrato")
     if idx is None:
         return
-    ok = reactivate_contract(contracts[idx], date.today())
-    if ok:
+    try:
+        reactivate_contract(contracts[idx], date.today())
         print("> Contrato reativado.")
-    else:
-        print("> Contrato já está ativo.")
+    except ContractActiveError as e:
+        print(f"> {e}")
 
 def handle_remove_contract(contracts: list[Contract]) -> None:
     idx = select_from_list(contracts, "contrato")

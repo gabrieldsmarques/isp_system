@@ -85,103 +85,154 @@ import re
 
 DATA_FILE = "data.json"
 
-def menu():
-    print("\n=== Sistema ISP (CRUD + Validação) ===")
-    print("1. Adicionar cliente")
-    print("2. Listar clientes")
-    print("3. Editar cliente")
-    print("4. Remover cliente")
-    print("5. Adicionar plano")
-    print("6. Listar planos")
-    print("7. Editar plano")
-    print("8. Remover plano")
-    print("9. Criar contrato")
-    print("10. Listar contratos")
-    print("11. Cancelar contrato")
-    print("12. Reativar contrato")
-    print("13. Remover contrato")
-    print("14. Gerar fatura")
-    print("15. Listar faturas")
-    print("16. Pagar fatura")
-    print("17. Remover fatura")
-    print("18. Abrir chamado de suporte")
-    print("19. Listar chamados")
-    print("20. Fechar chamado")
-    print("21. Reabrir chamado")
-    print("22. Remover chamado")
+def menu_principal() -> str:
+    print("\n=== Sistema ISP ===")
+    print("1. Clientes")
+    print("2. Planos")
+    print("3. Contratos")
+    print("4. Faturas")
+    print("5. Chamados")
     print("0. Sair")
-    return input("Escolha uma opção: ").strip()
+    return input("Escolha o domínio: ").strip()
 
+def submenu_clientes(customers, plans, contracts, invoices, tickets):
+    while True:
+        print("\n--- Clientes ---")
+        print("1. Adicionar cliente")
+        print("2. Listar clientes")
+        print("3. Editar cliente")
+        print("4. Remover cliente")
+        print("0. Voltar")
+        op = input("Opção: ").strip()
+        if op == "1":
+            handle_add_customer(customers)
+        elif op == "2":
+            handle_list_customers(customers)
+        elif op == "3":
+            handle_edit_customer(customers)
+        elif op == "4":
+            handle_remove_customer(customers)
+        elif op == "0":
+            break
+        else:
+            print("> Opção inválida para Clientes.")
+
+def submenu_planos(customers, plans, contracts, invoices, tickets):
+    while True:
+        print("\n--- Planos ---")
+        print("1. Adicionar plano")
+        print("2. Listar planos")
+        print("3. Editar plano")
+        print("4. Remover plano")
+        print("0. Voltar")
+        op = input("Opção: ").strip()
+        if op == "1":
+            handle_add_plan(plans)
+        elif op == "2":
+            handle_list_plans(plans)
+        elif op == "3":
+            handle_edit_plan(plans)
+        elif op == "4":
+            handle_remove_plan(plans)
+        elif op == "0":
+            break
+        else:
+            print("> Opção inválida para Planos.")
+
+def submenu_contratos(customers, plans, contracts, invoices, tickets):
+    while True:
+        print("\n--- Contratos ---")
+        print("1. Criar contrato")
+        print("2. Listar contratos")
+        print("3. Cancelar contrato")
+        print("4. Reativar contrato")
+        print("5. Remover contrato")
+        print("0. Voltar")
+        op = input("Opção: ").strip()
+        if op == "1":
+            handle_create_contract(customers, plans, contracts)
+        elif op == "2":
+            handle_list_contracts(contracts)
+        elif op == "3":
+            handle_cancel_contract(contracts)
+        elif op == "4":
+            handle_reactivate_contract(contracts)
+        elif op == "5":
+            handle_remove_contract(contracts)
+        elif op == "0":
+            break
+        else:
+            print("> Opção inválida para Contratos.")
+
+def submenu_faturas(customers, plans, contracts, invoices, tickets):
+    while True:
+        print("\n--- Faturas ---")
+        print("1. Gerar fatura")
+        print("2. Listar faturas")
+        print("3. Pagar fatura")
+        print("4. Remover fatura")
+        print("0. Voltar")
+        op = input("Opção: ").strip()
+        if op == "1":
+            handle_generate_invoice(contracts, invoices)
+        elif op == "2":
+            handle_list_invoices(invoices)
+        elif op == "3":
+            handle_pay_invoice(invoices)
+        elif op == "4":
+            handle_remove_invoice(invoices)
+        elif op == "0":
+            break
+        else:
+            print("> Opção inválida para Faturas.")
+
+def submenu_chamados(customers, plans, contracts, invoices, tickets):
+    while True:
+        print("\n--- Chamados ---")
+        print("1. Abrir chamado")
+        print("2. Listar chamados")
+        print("3. Fechar chamado")
+        print("4. Reabrir chamado")
+        print("5. Remover chamado")
+        print("0. Voltar")
+        op = input("Opção: ").strip()
+        if op == "1":
+            handle_open_ticket(customers, tickets)
+        elif op == "2":
+            handle_list_tickets(tickets)
+        elif op == "3":
+            handle_close_ticket(tickets)
+        elif op == "4":
+            handle_reopen_ticket(tickets)
+        elif op == "5":
+            handle_remove_ticket(tickets)
+        elif op == "0":
+            break
+        else:
+            print("> Opção inválida para Chamados.")
 
 def main():
-    repo = DataRepository() 
+    repo = DataRepository()
     customers, plans, contracts, invoices, tickets = repo.load()
 
     while True:
-        choice = menu()
-
-        # Clientes
-        if choice == "1":
-            handle_add_customer(customers)
-        elif choice == "2":
-            handle_list_customers(customers)
-        elif choice == "3":
-            handle_edit_customer(customers)
-        elif choice == "4":
-            handle_remove_customer(customers)
-
-        # Planos
-        elif choice == "5":
-            handle_add_plan(plans)
-        elif choice == "6":
-            handle_list_plans(plans)
-        elif choice == "7":
-            handle_edit_plan(plans)
-        elif choice == "8":
-            handle_remove_plan(plans)
-
-        # Contratos
-        elif choice == "9":
-            handle_create_contract(customers, plans, contracts)
-        elif choice == "10":
-            handle_list_contracts(contracts)
-        elif choice == "11":
-            handle_cancel_contract(contracts)
-        elif choice == "12":
-            handle_reactivate_contract(contracts)
-        elif choice == "13":
-            handle_remove_contract(contracts)
-
-        # Faturas
-        elif choice == "14":
-            handle_generate_invoice(contracts, invoices)
-        elif choice == "15":
-            handle_list_invoices(invoices)
-        elif choice == "16":
-            handle_pay_invoice(invoices)
-        elif choice == "17":
-            handle_remove_invoice(invoices)
-
-        # Chamados
-        elif choice == "18":
-            handle_open_ticket(customers, tickets)
-        elif choice == "19":
-            handle_list_tickets(tickets)
-        elif choice == "20":
-            handle_close_ticket(tickets)
-        elif choice == "21":
-            handle_reopen_ticket(tickets)
-        elif choice == "22":
-            handle_remove_ticket(tickets)
-
-        # Sair
-        elif choice == "0":
+        dom = menu_principal()
+        if dom == "1":
+            submenu_clientes(customers, plans, contracts, invoices, tickets)
+        elif dom == "2":
+            submenu_planos(customers, plans, contracts, invoices, tickets)
+        elif dom == "3":
+            submenu_contratos(customers, plans, contracts, invoices, tickets)
+        elif dom == "4":
+            submenu_faturas(customers, plans, contracts, invoices, tickets)
+        elif dom == "5":
+            submenu_chamados(customers, plans, contracts, invoices, tickets)
+        elif dom == "0":
             repo.save(customers, plans, contracts, invoices, tickets)
-            print(f"> Dados salvos em {repo.filename}. Encerrando.")
+            print(f"> Dados salvos em {repo.filename}. Até logo!")
             break
-
         else:
-            print("> Opção inválida.")
+            print("> Domínio inválido.")
 
 if __name__ == "__main__":
     main()
