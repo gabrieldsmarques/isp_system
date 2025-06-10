@@ -6,6 +6,9 @@ from model.invoice import Invoice
 from model.support_ticket import SupportTicket
 from persistence import JsonPersistence
 
+# Arquivo padrão de persistência
+DATA_FILE = "data.json"
+
 def menu():
     print("\n=== Sistema ISP ===")
     print("1. Adicionar cliente")
@@ -18,17 +21,76 @@ def menu():
     print("8. Listar faturas")
     print("9. Abrir chamado de suporte")
     print("10. Listar chamados")
-    print("11. Salvar dados")
-    print("12. Carregar dados")
     print("0. Sair")
     return input("Escolha uma opção: ").strip()
 
+def load_data(filename=DATA_FILE):
+    """
+    Carrega dados de JSON e reconstrói objetos via from_dict(), 
+    ou retorna listas vazias se o arquivo não existir.
+    """
+    try:
+        raw = JsonPersistence.load(filename)
+    except FileNotFoundError:
+        return [], [], [], [], []
+
+    # Reconstrução usando métodos from_dict(), se disponíveis
+    if hasattr(Customer, "from_dict"):
+        customers = [Customer.from_dict(d) for d in raw.get("customers", [])]
+    else:
+        customers = []
+
+    if hasattr(Plan, "from_dict"):
+        plans = [Plan.from_dict(d) for d in raw.get("plans", [])]
+    else:
+        plans = []
+
+    if hasattr(Contract, "from_dict"):
+        contracts = [
+            Contract.from_dict(d,
+                               {c.ssn: c for c in customers},
+                               {p.name: p for p in plans})
+            for d in raw.get("contracts", [])
+        ]
+    else:
+        contracts = []
+
+    if hasattr(Invoice, "from_dict"):
+        invoices = [
+            Invoice.from_dict(d,
+                              {ctr.customer.ssn: ctr for ctr in contracts})
+            for d in raw.get("invoices", [])
+        ]
+    else:
+        invoices = []
+
+    if hasattr(SupportTicket, "from_dict"):
+        support_tickets = [
+            SupportTicket.from_dict(d,
+                                    {c.ssn: c for c in customers})
+            for d in raw.get("support_tickets", [])
+        ]
+    else:
+        support_tickets = []
+
+    return customers, plans, contracts, invoices, support_tickets
+
+def save_data(customers, plans, contracts, invoices, tickets, filename=DATA_FILE):
+    """
+    Salva todos os dados em um arquivo JSON.
+    """
+    data = {
+        "customers": [c.to_dict() for c in customers],
+        "plans": [p.to_dict() for p in plans],
+        "contracts": [c.to_dict() for c in contracts],
+        "invoices": [i.to_dict() for i in invoices],
+        "support_tickets": [t.to_dict() for t in tickets],
+    }
+    JsonPersistence.save(filename, data)
+
 def main():
-    customers = []
-    plans = []
-    contracts = []
-    invoices = []
-    tickets = []
+    # auto-load de dados
+    customers, plans, contracts, invoices, tickets = load_data()
 
     while True:
         choice = menu()
@@ -75,8 +137,11 @@ def main():
                 print(f"{i}. {p.name}")
             pi = int(input("Índice do plano: ")) - 1
 
-            start = date.today()
-            ctr = Contract(customer=customers[ci], plan=plans[pi], start_date=start)
+            ctr = Contract(
+                customer=customers[ci],
+                plan=plans[pi],
+                start_date=date.today()
+            )
             contracts.append(ctr)
             print(f"> Contrato criado: {ctr}")
 
@@ -87,11 +152,11 @@ def main():
                 print(f"  - {ctr} | {ctr.get_status()}")
 
         elif choice == "7":
-            if not contracts:
+            ativos = [c for c in contracts if c.active]
+            if not ativos:
                 print("> É necessário ao menos um contrato ativo.")
                 continue
             print("Selecione contrato para faturar:")
-            ativos = [c for c in contracts if c.active]
             for i, c in enumerate(ativos, 1):
                 print(f"{i}. {c}")
             ci = int(input("Índice do contrato: ")) - 1
@@ -130,29 +195,10 @@ def main():
             for t in tickets:
                 print(f"  - {t} | {t.get_status()}")
 
-        elif choice == "11":
-            filename = input("Nome do arquivo para salvar [data.json]: ").strip() or "data.json"
-            data = {
-                "customers": [c.to_dict() for c in customers],
-                "plans": [p.to_dict() for p in plans],
-                "contracts": [c.to_dict() for c in contracts],
-                "invoices": [i.to_dict() for i in invoices],
-                "support_tickets": [t.to_dict() for t in tickets],
-            }
-            JsonPersistence.save(filename, data)
-            print(f"> Dados salvos em {filename}")
-
-        elif choice == "12":
-            filename = input("Nome do arquivo para carregar [data.json]: ").strip() or "data.json"
-            try:
-                raw = JsonPersistence.load(filename)
-            except FileNotFoundError:
-                print(f"> Arquivo não encontrado: {filename}")
-                continue
-            print("> Dados carregados (raw):")
-            print(raw)
-
         elif choice == "0":
+            # auto-save antes de sair
+            save_data(customers, plans, contracts, invoices, tickets)
+            print(f"> Dados salvos em {DATA_FILE}")
             print("Saindo… até a próxima!")
             break
 

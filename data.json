@@ -1,46 +1,13 @@
 {
     "customers": [
         {
-            "ssn": "12345678900",
-            "name": "Alice Silva",
-            "address": "Rua das Flores, 123"
+            "ssn": "123",
+            "name": "eumesmo",
+            "address": "dafasd"
         }
     ],
-    "plans": [
-        {
-            "name": "Basic",
-            "speed_mbps": 50.0,
-            "monthly_fee": 79.9
-        }
-    ],
-    "contracts": [
-        {
-            "customer_ssn": "12345678900",
-            "plan_name": "Basic",
-            "start_date": "2025-06-08",
-            "active": true,
-            "end_date": null
-        }
-    ],
-    "invoices": [
-        {
-            "customer_ssn": "12345678900",
-            "issue_date": "2025-06-08",
-            "amount": 79.9,
-            "due_date": "2025-07-08",
-            "paid": true,
-            "paid_date": "2025-06-13"
-        }
-    ],
-    "support_tickets": [
-        {
-            "id": 1,
-            "customer_ssn": "12345678900",
-            "issue_description": "Internet intermitente nos finais de semana",
-            "open_date": "2025-06-08",
-            "status": "Fechado",
-            "close_date": "2025-06-10",
-            "resolution": "Reinicialização do modem e ajuste de sinal concluídos"
-        }
-    ]
+    "plans": [],
+    "contracts": [],
+    "invoices": [],
+    "support_tickets": []
 }
