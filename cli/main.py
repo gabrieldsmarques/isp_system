@@ -1,10 +1,8 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from datetime import date, timedelta
 from repositories.data_repository import DataRepository
 
-from cli.utils import select_from_list
 from cli.controllers.customer_controller import (
     handle_add_customer,
     handle_list_customers,
@@ -37,51 +35,6 @@ from cli.controllers.ticket_controller import (
     handle_reopen_ticket,
     handle_remove_ticket
 )
-
-
-from models.customer import Customer
-
-from models.plan import Plan
-from models.contract import Contract
-from models.invoice import Invoice
-from models.support_ticket import SupportTicket
-
-from validators.input_validators import valid_cpf, valid_positive_number
-
-from services.customer_service import (
-    add_customer,
-    list_customers,
-    update_customer,
-    remove_customer
-    )
-from services.plan_service import (
-    add_plan,
-    list_plans,
-    update_plan,
-    remove_plan
-    )
-from services.contract_service import (
-    create_contract,
-    list_contracts,
-    cancel_contract,
-    reactivate_contract,
-    remove_contract
-    )
-from services.invoice_service import (
-    generate_invoice,
-    list_invoices,
-    pay_invoice,
-    remove_invoice
-    )
-from services.support_ticket_service import (
-    open_ticket,
-    list_tickets,
-    close_ticket, 
-    reopen_ticket, 
-    remove_ticket
-    )
-
-import re
 
 DATA_FILE = "data.json"
 

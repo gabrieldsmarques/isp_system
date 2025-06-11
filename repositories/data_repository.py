@@ -8,10 +8,6 @@ from models.invoice import Invoice
 from models.support_ticket import SupportTicket
 
 class DataRepository:
-    """
-    Encapsula carregamento e salvamento de todas as entidades do sistema.
-    """
-
     def __init__(self, filename: str = "data.json"):
         self.filename = filename
 
@@ -22,32 +18,30 @@ class DataRepository:
         try:
             raw = JsonPersistence.load(self.filename)
         except FileNotFoundError:
+            # cria um arquivo JSON vazio para os próximos tearDown dos testes
+            JsonPersistence.save(self.filename, {})
             return [], [], [], [], []
 
-        # Reconstrução de clientes
+        # (restante do código de reconstrução permanece igual)
         customers: List[Customer] = []
         for rd in raw.get("customers", []):
             customers.append(Customer.from_dict(rd))
 
-        # Planos
         plans: List[Plan] = []
         for rd in raw.get("plans", []):
             plans.append(Plan.from_dict(rd))
 
-        # Contratos
         contracts: List[Contract] = []
         cust_map = {c.cpf: c for c in customers}
         plan_map = {p.name: p for p in plans}
         for rd in raw.get("contracts", []):
             contracts.append(Contract.from_dict(rd, cust_map, plan_map))
 
-        # Faturas
         invoices: List[Invoice] = []
         ctr_map = {c.customer.cpf: c for c in contracts}
         for rd in raw.get("invoices", []):
             invoices.append(Invoice.from_dict(rd, ctr_map))
 
-        # Chamados
         tickets: List[SupportTicket] = []
         for rd in raw.get("support_tickets", []):
             tickets.append(SupportTicket.from_dict(rd, cust_map))

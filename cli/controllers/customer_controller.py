@@ -1,6 +1,6 @@
 from models.customer import Customer
 from validators.input_validators import valid_cpf
-from cli.utils import select_from_list, select_or_search
+from cli.utils import select_or_search
 
 
 def handle_add_customer(customers: list[Customer]) -> None:
